@@ -13,7 +13,7 @@ font_size = 11
 font_style = "bold"
 
 class Application(tk.Tk):
-    
+    A = FALSE
     def __init__(self):
         
         super().__init__()
@@ -100,9 +100,15 @@ class Application(tk.Tk):
 
     def logout_button(self):
         my_font = font.Font(family=font_name, size=font_size, weight=font_style)
-        loginbutton = tk.Button(self, text="خروج از حساب کاربری", width=15, height=2, font=my_font, command=self.logout)
-        loginbutton.place(x=620, y=0)
+        loginbutton = tk.Button(self, text="خروج از حساب", width=9, height=2, font=my_font, command=self.logout)
+        loginbutton.place(x=690, y=0)
         loginbutton.configure(bg='light gray')
+        
+    def favorites_button(self):
+        my_font = font.Font(family=font_name, size=font_size, weight=font_style)
+        favebutton = tk.Button(self, text="علاقه مندی", width=7, height=2, font=my_font, command=self.favorites_page)
+        favebutton.place(x=610, y=0)
+        favebutton.configure(bg='light gray')
     
     def login_page(self):
         for widget in self.winfo_children():
@@ -113,7 +119,11 @@ class Application(tk.Tk):
 
         new_button = tk.Button(new_frame, text="بازگشت به صفحه اصلی", command=self.return_to_main_page, width=20 , height=2)
         new_button.pack()
-            
+        
+        my_font = font.Font(family=font_name, size=font_size, weight=font_style)
+        label1 = tk.Label(self, text="! وارد حساب خود شوید", font=my_font)
+        label1.place(x=323, y=220)
+        
         login_username_label = Label(self, text=": نام کاربری")
         login_username_label.place(x=450 , y=258)
         self.login_username_entry = Entry(self)
@@ -137,7 +147,11 @@ class Application(tk.Tk):
 
         new_button = tk.Button(new_frame, text="بازگشت به صفحه اصلی", command=self.return_to_main_page, width=20 , height=2)
         new_button.pack()
-            
+        
+        my_font = font.Font(family=font_name, size=font_size, weight=font_style)
+        label1 = tk.Label(self, text="! حساب خود را بسازید", font=my_font)
+        label1.place(x=323, y=200)
+        
         signup_name_label = Label(self, text=":نام و نام خانوادگی")
         signup_name_label.place(x=450 , y=238)
         self.signup_name_entry = Entry(self)
@@ -160,6 +174,17 @@ class Application(tk.Tk):
         label_status.place(x=300, y=370)
         self.label_status = label_status
         
+    def favorites_page(self):
+        
+        for widget in self.winfo_children():
+            widget.destroy()
+            
+        new_frame = Frame(self)
+        new_frame.pack()
+
+        new_button = tk.Button(new_frame, text="بازگشت به صفحه اصلی", command=self.return_to_main_page, width=20 , height=2)
+        new_button.pack()
+        
     def login(self):
         
         username = self.login_username_entry.get()
@@ -171,6 +196,7 @@ class Application(tk.Tk):
 
         if result and username != '':
             messagebox.showinfo('ورود موفق', message= "! با موفقیت وارد شدید")
+            self.A = TRUE
             self.loged_in()
         else :
             messagebox.showerror('ورود ناموفق', message= "! نام کاربری یا رمز عبور صحیح نیست")
@@ -198,18 +224,26 @@ class Application(tk.Tk):
     def logout(self):
         answer = messagebox.askyesno(' خروج از حساب ', message= "از حساب کاربری خارج می شوید؟")
         if answer == YES:
+            self.A = FALSE
             self.return_to_main_page()
         
     def return_to_main_page(self):
-        
-        for widget in self.winfo_children():
-            widget.destroy()
-
-        self.search_box()
-        self.category_buttons()
-        self.login_button()
-        self.signup_button()
-        self.logo_image()
+        if self.A is FALSE:
+            for widget in self.winfo_children():
+                widget.destroy()
+            self.search_box()
+            self.category_buttons()
+            self.login_button()
+            self.signup_button()
+            self.logo_image()
+        if self.A is TRUE:
+            for widget in self.winfo_children():
+                widget.destroy()
+            self.search_box()
+            self.category_buttons()
+            self.logout_button()
+            self.favorites_button()
+            self.logo_image()
 
     def loged_in (self):
         
@@ -217,7 +251,9 @@ class Application(tk.Tk):
             widget.destroy()
         self.search_box()
         self.category_buttons()
+        self.favorites_button()
         self.logout_button()
+        self.favorites_button()
         self.logo_image()
         
     def search_result(self):
